@@ -1,0 +1,23 @@
+/* Maps the login / account screens onto this app's own colours and type. */
+:root {
+  --h-bg: var(--paper);
+  --h-card: var(--card);
+  --h-fg: var(--ink);
+  --h-muted: var(--muted);
+  --h-line: var(--line);
+  --h-acc: var(--cyan);
+  --h-on-acc: #fff;
+  --h-bad: var(--magenta);
+  --h-ok: var(--ok);
+  --h-font: "Archivo", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --h-display: "Archivo", system-ui, sans-serif;
+  --h-display-stretch: 78%;
+}
+.ah-cmyk { display: flex; gap: 3px; }
+.ah-cmyk i { width: 12px; height: 12px; display: block; }
+.ah-cmyk i:nth-child(1) { background: var(--cyan); }
+.ah-cmyk i:nth-child(2) { background: var(--magenta); }
+.ah-cmyk i:nth-child(3) { background: var(--yellow); }
+.ah-cmyk i:nth-child(4) { background: var(--ink); }
+.ah-login-card::before { content: ""; display: block; height: 4px; margin: -24px -22px 20px; border-radius: 14px 14px 0 0;
+  background: linear-gradient(90deg, var(--cyan) 0 25%, var(--magenta) 25% 50%, var(--yellow) 50% 75%, var(--ink) 75% 100%); }

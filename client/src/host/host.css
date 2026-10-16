@@ -1,0 +1,70 @@
+/* Login and "Logins & passwords" screens. Colours come from theme.css (this app's palette). */
+.ah-screen {
+  min-height: 100vh; min-height: 100dvh; display: flex; align-items: center; justify-content: center;
+  padding: calc(24px + env(safe-area-inset-top, 0px)) 16px calc(24px + env(safe-area-inset-bottom, 0px));
+  background: var(--h-bg); color: var(--h-fg); font-family: var(--h-font);
+}
+.ah-login-card {
+  width: 100%; max-width: 380px; background: var(--h-card); border: 1px solid var(--h-line);
+  border-radius: 14px; padding: 24px 22px; display: flex; flex-direction: column; gap: 14px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, .08); overflow: hidden;
+}
+.ah-brand { display: flex; align-items: center; gap: 12px; }
+.ah-brand-name { font-family: var(--h-display); font-stretch: var(--h-display-stretch, 100%); font-weight: 800; font-size: 26px; line-height: 1.05; }
+.ah-brand-sub { color: var(--h-muted); font-size: 13px; }
+.ah-h { font-family: var(--h-display); font-stretch: var(--h-display-stretch, 100%); font-weight: 700; font-size: 20px; margin: 4px 0 0; }
+.ah-p { color: var(--h-muted); font-size: 14px; margin: 0; line-height: 1.45; }
+.ah-form { display: flex; flex-direction: column; gap: 12px; margin: 0; }
+.ah-field { display: flex; flex-direction: column; gap: 5px; font-size: 13px; font-weight: 600; color: var(--h-muted); margin: 0; }
+.ah-field input, .ah-field select {
+  display: block; width: 100%; margin: 0; padding: 11px 12px; font: inherit; font-size: 16px; font-weight: 400;
+  color: var(--h-fg); background: var(--h-bg); border: 1px solid var(--h-line); border-radius: 10px; box-sizing: border-box;
+}
+.ah-field input:focus-visible, .ah-field select:focus-visible, .ah-btn:focus-visible, .ah-x:focus-visible { outline: 2px solid var(--h-acc); outline-offset: 1px; }
+.ah-row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+@media (max-width: 400px) { .ah-row2 { grid-template-columns: 1fr; } }
+.ah-btn {
+  border: 1px solid var(--h-line); background: var(--h-card); color: var(--h-fg); font: inherit; font-weight: 700; font-size: 15px;
+  padding: 11px 14px; border-radius: 10px; cursor: pointer; white-space: nowrap;
+}
+.ah-btn.primary { background: var(--h-acc); border-color: var(--h-acc); color: var(--h-on-acc); }
+.ah-btn.danger { color: var(--h-bad); border-color: var(--h-bad); }
+.ah-btn.sm { padding: 7px 10px; font-size: 13px; }
+.ah-btn:disabled { opacity: .55; cursor: default; }
+.ah-err { background: color-mix(in srgb, var(--h-bad) 12%, transparent); color: var(--h-bad); padding: 10px 12px; border-radius: 10px; font-size: 14px; }
+.ah-ok { background: color-mix(in srgb, var(--h-ok) 14%, transparent); color: var(--h-ok); padding: 10px 12px; border-radius: 10px; font-size: 14px; }
+.ah-foot { color: var(--h-muted); font-size: 12px; text-align: center; }
+
+/* account sheet */
+.ah-scrim { position: fixed; inset: 0; z-index: 1000; background: rgba(10, 10, 12, .5); display: flex; align-items: flex-end; justify-content: center; font-family: var(--h-font); color: var(--h-fg); }
+.ah-sheet {
+  width: 100%; max-width: 640px; max-height: 92%; background: var(--h-bg); border-radius: 16px 16px 0 0;
+  display: flex; flex-direction: column; overflow: hidden; padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+@media (min-width: 700px) { .ah-scrim { align-items: center; } .ah-sheet { border-radius: 16px; max-height: 88%; } }
+.ah-sheet-h { display: flex; align-items: center; gap: 10px; padding: 14px 16px 12px; background: var(--h-card); border-bottom: 1px solid var(--h-line); }
+.ah-sheet-h .ah-h { flex: 1; margin: 0; font-size: 22px; }
+.ah-x { width: 38px; height: 38px; border-radius: 10px; border: 1px solid var(--h-line); background: var(--h-card); color: var(--h-fg); font-size: 22px; line-height: 1; cursor: pointer; }
+.ah-sheet-b { overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 16px; }
+.ah-card { background: var(--h-card); border: 1px solid var(--h-line); border-radius: 12px; padding: 14px; display: flex; flex-direction: column; gap: 12px; }
+.ah-card-h { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+.ah-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--h-muted); margin: 0; }
+.ah-me { display: flex; align-items: center; gap: 12px; }
+.ah-av { width: 40px; height: 40px; border-radius: 50%; background: var(--h-acc); color: var(--h-on-acc); display: grid; place-items: center; font-weight: 800; font-size: 17px; flex: none; }
+.ah-me b { display: block; font-size: 17px; }
+.ah-me span { color: var(--h-muted); font-size: 13px; }
+.ah-users { display: flex; flex-direction: column; }
+.ah-user { display: grid; grid-template-columns: 1fr auto; gap: 8px 10px; padding: 12px 0; border-top: 1px solid var(--h-line); align-items: center; }
+.ah-user:first-child { border-top: 0; padding-top: 0; }
+.ah-user .nm { font-weight: 700; min-width: 0; overflow-wrap: anywhere; }
+.ah-user .sub { color: var(--h-muted); font-size: 13px; grid-column: 1 / -1; margin-top: -6px; }
+.ah-user .acts { grid-column: 1 / -1; display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+.ah-user .acts select { padding: 7px 8px; border: 1px solid var(--h-line); border-radius: 8px; background: var(--h-bg); color: var(--h-fg); font: inherit; font-size: 14px; }
+.ah-user.off .nm { color: var(--h-muted); text-decoration: line-through; }
+.ah-pill { font-size: 11px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; padding: 2px 8px; border-radius: 99px; background: color-mix(in srgb, var(--h-acc) 14%, transparent); color: var(--h-acc); white-space: nowrap; }
+.ah-pill.warn { background: color-mix(in srgb, var(--h-bad) 12%, transparent); color: var(--h-bad); }
+.ah-inline { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; width: 100%; }
+.ah-inline input { flex: 1 1 160px; min-width: 0; padding: 8px 10px; border: 1px solid var(--h-line); border-radius: 8px; background: var(--h-bg); color: var(--h-fg); font: inherit; font-size: 16px; }
+.ah-roles { margin: 0; padding-left: 18px; color: var(--h-muted); font-size: 13px; display: flex; flex-direction: column; gap: 3px; }
+.ah-roles b { color: var(--h-fg); }
+.ah-loading { color: var(--h-muted); font-size: 15px; }

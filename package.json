@@ -1,0 +1,33 @@
+{
+  "name": "print-floor-erp",
+  "version": "1.0.0",
+  "description": "Print Floor ERP for Arihant Enterprises — React + Express + MySQL",
+  "private": true,
+  "main": "server.js",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "vite build --config client/vite.config.mjs",
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "dev:client": "vite --config client/vite.config.mjs",
+    "migrate": "node server/migrate.js",
+    "user:create": "node server/tools/create-user.js",
+    "user:reset-password": "node server/tools/reset-password.js",
+    "data:export": "node server/tools/export-json.js",
+    "data:import": "node server/tools/import-json.js"
+  },
+  "dependencies": {
+    "@vitejs/plugin-react": "^4.3.4",
+    "bcryptjs": "^2.4.3",
+    "compression": "^1.7.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2",
+    "mysql2": "^3.12.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "vite": "^5.4.14"
+  }
+}
