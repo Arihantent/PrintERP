@@ -53,9 +53,9 @@ async function runMigrations({ log = console.log } = {}) {
 async function ensureOwner(conn, log) {
   const [[{ n }]] = await conn.query("SELECT COUNT(*) AS n FROM users WHERE role='owner' AND active=1");
   if (n > 0) return;
-  const username = (process.env.OWNER_USERNAME || 'owner').trim().toLowerCase();
+  const username = (process.env.OWNER_USERNAME || 'jeet').trim().toLowerCase();
   const password = process.env.OWNER_PASSWORD || 'ChangeMe@123';
-  const name = process.env.OWNER_NAME || 'Owner';
+  const name = process.env.OWNER_NAME || 'Jeet Shah';
   const id = process.env.OWNER_ID || APP.defaultOwnerId;
   const hash = await bcrypt.hash(password, 10);
   await conn.query(

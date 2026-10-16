@@ -27,10 +27,10 @@ export function LoginScreen({ onLoggedIn }) {
     <div className="ah-screen">
       <div className="ah-login-card">
         <Brand />
-        <p className="ah-p">{cfg.tagline}. Log in with the username the owner gave you.</p>
+        <p className="ah-p">{cfg.tagline}. Log in with the username or email the owner gave you.</p>
         <form className="ah-form" onSubmit={submit}>
-          <label className="ah-field">Username
-            <input value={username} onChange={(e) => setUsername(e.target.value)} autoCapitalize="none" autoCorrect="off" autoComplete="username" required autoFocus />
+          <label className="ah-field">Username or email
+            <input value={username} onChange={(e) => setUsername(e.target.value)} autoCapitalize="none" autoCorrect="off" autoComplete="username" inputMode="email" required autoFocus />
           </label>
           <label className="ah-field">Password
             <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} autoComplete="current-password" required />

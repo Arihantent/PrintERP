@@ -98,7 +98,7 @@ function AddUser({ onAdded }) {
         <label className="ah-field">Role
           <select value={f.role} onChange={up('role')}>{ROLE_KEYS.map((r) => <option key={r} value={r}>{roleLabel(r)}</option>)}</select>
         </label>
-        <label className="ah-field">Username<input value={f.username} onChange={up('username')} required autoCapitalize="none" autoCorrect="off" placeholder="e.g. ramesh" autoComplete="off" /></label>
+        <label className="ah-field">Username or email<input value={f.username} onChange={up('username')} required autoCapitalize="none" autoCorrect="off" placeholder="e.g. ramesh or ramesh@company.com" autoComplete="off" /></label>
         <label className="ah-field">Temporary password<input value={f.password} onChange={up('password')} required minLength={6} autoComplete="off" /></label>
       </div>
       {err && <div className="ah-err">{err}</div>}

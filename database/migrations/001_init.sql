@@ -4,7 +4,7 @@
 -- People who can log in. role: owner | accounts | factory | none
 CREATE TABLE IF NOT EXISTS users (
   id            VARCHAR(40)  NOT NULL,
-  username      VARCHAR(60)  NOT NULL,
+  username      VARCHAR(120) NOT NULL,
   name          VARCHAR(120) NOT NULL,
   password_hash VARCHAR(100) NOT NULL,
   role          VARCHAR(20)  NOT NULL DEFAULT 'factory',

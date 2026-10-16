@@ -9,7 +9,7 @@ const router = express.Router();
 router.use(requireAuth());
 
 const newUserId = () => 'u_' + crypto.randomBytes(17).toString('base64url').slice(0, 22);
-const USERNAME_RE = /^[a-z0-9._-]{3,40}$/;
+const USERNAME_RE = /^(?:[a-z0-9][a-z0-9._-]{1,58}[a-z0-9]|[a-z0-9._%+-]+@[a-z0-9](?:[a-z0-9-]{0,62}[a-z0-9])?(?:\.[a-z0-9](?:[a-z0-9-]{0,62}[a-z0-9])?)+)$/;
 
 function row(u, meId) {
   return {
@@ -66,7 +66,7 @@ router.post('/', requireOwner, async (req, res, next) => {
     const password = String(req.body.password || '');
     const role = String(req.body.role || '');
     if (!name) return res.status(400).json({ code: 'invalid_argument', message: 'Enter the person\'s name.' });
-    if (!USERNAME_RE.test(username)) return res.status(400).json({ code: 'invalid_argument', message: 'Username: 3–40 letters, numbers, dot, dash or underscore. No spaces.' });
+    if (username.length > 120 || !USERNAME_RE.test(username)) return res.status(400).json({ code: 'invalid_argument', message: 'Use a short username, or an email address. No spaces.' });
     if (password.length < 6) return res.status(400).json({ code: 'invalid_argument', message: 'Password must be at least 6 characters.' });
     if (!rules.ROLES.includes(role)) return res.status(400).json({ code: 'invalid_argument', message: 'Pick a role.' });
     const exists = await query('SELECT id FROM users WHERE username=?', [username]);

@@ -139,7 +139,7 @@ DROP TABLE IF EXISTS `users`;
 /*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `users` (
   `id` varchar(40) NOT NULL,
-  `username` varchar(60) NOT NULL,
+  `username` varchar(120) NOT NULL,
   `name` varchar(120) NOT NULL,
   `password_hash` varchar(100) NOT NULL,
   `role` varchar(20) NOT NULL DEFAULT 'factory',
