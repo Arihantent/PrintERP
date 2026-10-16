@@ -8,6 +8,8 @@ export default defineConfig({
   root,
   plugins: [react()],
   build: {
+    // esbuild 0.28 no longer rewrites destructuring for Vite's older default browsers.
+    target: 'es2022',
     outDir: fileURLToPath(new URL('../dist', import.meta.url)),
     emptyOutDir: true,
     chunkSizeWarningLimit: 2000,

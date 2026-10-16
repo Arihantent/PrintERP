@@ -11,6 +11,12 @@ router.use(requireAuth());
 const newUserId = () => 'u_' + crypto.randomBytes(17).toString('base64url').slice(0, 22);
 const USERNAME_RE = /^(?:[a-z0-9][a-z0-9._-]{1,58}[a-z0-9]|[a-z0-9._%+-]+@[a-z0-9](?:[a-z0-9-]{0,62}[a-z0-9])?(?:\.[a-z0-9](?:[a-z0-9-]{0,62}[a-z0-9])?)+)$/;
 
+function cleanUsername(raw) {
+  const username = String(raw || '').trim().toLowerCase();
+  if (!username || username.length > 120 || !USERNAME_RE.test(username)) return null;
+  return username;
+}
+
 function row(u, meId) {
   return {
     id: u.id,
@@ -62,11 +68,11 @@ router.get('/', requireOwner, async (req, res, next) => {
 router.post('/', requireOwner, async (req, res, next) => {
   try {
     const name = String(req.body.name || '').trim();
-    const username = String(req.body.username || '').trim().toLowerCase();
+    const username = cleanUsername(req.body.username);
     const password = String(req.body.password || '');
     const role = String(req.body.role || '');
     if (!name) return res.status(400).json({ code: 'invalid_argument', message: 'Enter the person\'s name.' });
-    if (username.length > 120 || !USERNAME_RE.test(username)) return res.status(400).json({ code: 'invalid_argument', message: 'Use a short username, or an email address. No spaces.' });
+    if (!username) return res.status(400).json({ code: 'invalid_argument', message: 'Use a short username, or an email address. No spaces.' });
     if (password.length < 6) return res.status(400).json({ code: 'invalid_argument', message: 'Password must be at least 6 characters.' });
     if (!rules.ROLES.includes(role)) return res.status(400).json({ code: 'invalid_argument', message: 'Pick a role.' });
     const exists = await query('SELECT id FROM users WHERE username=?', [username]);
@@ -79,6 +85,22 @@ router.post('/', requireOwner, async (req, res, next) => {
     await rules.onUserRoleChanged(id, role, req.user.id);
     const [u] = await query('SELECT * FROM users WHERE id=?', [id]);
     res.status(201).json(row(u, req.user.id));
+  } catch (e) { next(e); }
+});
+
+// The signed-in owner can change their own name and username or email.
+router.patch('/me', async (req, res, next) => {
+  try {
+    if (req.role !== 'owner') return res.status(403).json({ code: 'permission_denied', message: 'Only the owner can edit this profile.' });
+    const name = String(req.body.name || '').trim();
+    const username = cleanUsername(req.body.username);
+    if (!name) return res.status(400).json({ code: 'invalid_argument', message: 'Enter your name.' });
+    if (!username) return res.status(400).json({ code: 'invalid_argument', message: 'Use a short username, or an email address. No spaces.' });
+    const taken = await query('SELECT id FROM users WHERE username=? AND id<>?', [username, req.user.id]);
+    if (taken.length) return res.status(409).json({ code: 'already_exists', message: 'That username is taken.' });
+    await query('UPDATE users SET name=?, username=? WHERE id=?', [name, username, req.user.id]);
+    const [fresh] = await query('SELECT * FROM users WHERE id=?', [req.user.id]);
+    res.json({ user: row(fresh, req.user.id) });
   } catch (e) { next(e); }
 });
 

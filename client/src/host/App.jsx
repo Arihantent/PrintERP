@@ -69,7 +69,14 @@ export default function App() {
   return (
     <>
       <LegacyApp />
-      {account && <AccountSheet me={me} onClose={() => setAccount(false)} onSignOut={signOutAndReload} />}
+      {account && (
+        <AccountSheet
+          me={me}
+          onClose={() => setAccount(false)}
+          onSignOut={signOutAndReload}
+          onProfile={(user) => { meRef.current = { ...meRef.current, ...user }; setMe(meRef.current); }}
+        />
+      )}
     </>
   );
 }

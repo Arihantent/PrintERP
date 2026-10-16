@@ -5,6 +5,59 @@ import { api, setToken } from './api';
 const ROLE_KEYS = Object.keys(cfg.roles);
 const roleLabel = (r) => (cfg.roles[r] && cfg.roles[r].label) || (r === 'none' ? 'No role' : r);
 
+function EditProfile({ me, onSaved }) {
+  const [open, setOpen] = useState(false);
+  const [name, setName] = useState(me.name || '');
+  const [username, setUsername] = useState(me.username || '');
+  const [msg, setMsg] = useState(null);
+  const [busy, setBusy] = useState(false);
+
+  useEffect(() => {
+    setName(me.name || '');
+    setUsername(me.username || '');
+  }, [me.name, me.username]);
+
+  async function submit(e) {
+    e.preventDefault();
+    setMsg(null);
+    setBusy(true);
+    try {
+      const r = await api('/users/me', { method: 'PATCH', body: { name, username } });
+      onSaved(r.user);
+      setOpen(false);
+      setMsg({ ok: 'Profile saved.' });
+    } catch (x) { setMsg({ err: x.message }); }
+    setBusy(false);
+  }
+
+  if (!open) {
+    return (
+      <div>
+        <button className="ah-btn" type="button" onClick={() => { setMsg(null); setOpen(true); }}>Edit profile</button>
+        {msg && <div className={msg.ok ? 'ah-ok' : 'ah-err'}>{msg.ok || msg.err}</div>}
+      </div>
+    );
+  }
+
+  return (
+    <form className="ah-form" onSubmit={submit}>
+      <div className="ah-row2">
+        <label className="ah-field">Name
+          <input value={name} onChange={(e) => setName(e.target.value)} required autoComplete="name" />
+        </label>
+        <label className="ah-field">Username or email
+          <input value={username} onChange={(e) => setUsername(e.target.value)} required autoCapitalize="none" autoCorrect="off" autoComplete="username" />
+        </label>
+      </div>
+      {msg && <div className={msg.ok ? 'ah-ok' : 'ah-err'}>{msg.ok || msg.err}</div>}
+      <div style={{ display: 'flex', gap: 8 }}>
+        <button className="ah-btn primary" type="submit" disabled={busy}>{busy ? 'Saving…' : 'Save profile'}</button>
+        <button className="ah-btn" type="button" onClick={() => { setOpen(false); setName(me.name || ''); setUsername(me.username || ''); setMsg(null); }}>Cancel</button>
+      </div>
+    </form>
+  );
+}
+
 function ChangePassword() {
   const [current, setCurrent] = useState('');
   const [next, setNext] = useState('');
@@ -107,7 +160,7 @@ function AddUser({ onAdded }) {
   );
 }
 
-export default function AccountSheet({ me, onClose, onSignOut }) {
+export default function AccountSheet({ me, onClose, onSignOut, onProfile }) {
   const isOwner = me.role === 'owner';
   const [users, setUsers] = useState(null);
   const [err, setErr] = useState('');
@@ -124,7 +177,7 @@ export default function AccountSheet({ me, onClose, onSignOut }) {
     return () => document.removeEventListener('keydown', k);
   }, [onClose]);
 
-  const replace = (u) => setUsers((list) => list.map((x) => (x.id === u.id ? u : x)));
+  const replace = (u) => setUsers((list) => (list ? list.map((x) => (x.id === u.id ? u : x)) : list));
 
   return (
     <div className="ah-scrim" onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}>
@@ -139,6 +192,7 @@ export default function AccountSheet({ me, onClose, onSignOut }) {
               <div className="ah-av" aria-hidden="true">{(me.name || '?').trim()[0]?.toUpperCase()}</div>
               <div><b>{me.name}</b><span>@{me.username} · {roleLabel(me.role)}</span></div>
             </div>
+            {isOwner && <EditProfile me={me} onSaved={(user) => { onProfile && onProfile(user); replace({ ...user, isMe: true }); }} />}
             <ChangePassword />
             <div><button className="ah-btn danger" type="button" onClick={onSignOut}>Sign out of this phone</button></div>
           </div>
